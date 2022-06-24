@@ -2,20 +2,18 @@
 from random import randint
 from time import sleep
 from csv import reader
-from selenium.webdriver import Keys
+from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-links = []  # Initiate empty list to capture final results
-
 with open('concatenated search .csv') as csvfile:
     spamreader = reader(csvfile, delimiter=',')
     for row in spamreader:
+        # Randomise wait time
         time_to_sleep = randint(3, 10)
 
         # Creating an instance
@@ -30,23 +28,19 @@ with open('concatenated search .csv') as csvfile:
         driver.get('https:www.google.com')
         sleep(time_to_sleep)
 
+        # Accept cookie policy
         driver.find_element(By.XPATH, '//*[@id="L2AGLb"]/div').click()
         sleep(time_to_sleep)
 
+        # Search current row in browser
         search_query = driver.find_element(By.XPATH, '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input')
         search_query.send_keys(row)
         sleep(time_to_sleep)
 
-        sleep(time_to_sleep)
-
         # Query to obtain links
-        query = 'comprehensive guide to web scraping in python'
-
         soup = BeautifulSoup(driver.page_source, 'html.parser')
-
         search = soup.find_all('div', class_="yuRUbf")
         for h in search:
-            # links.append(h.a.get('href'))
             with open('urls.csv', 'a') as fd:
                 fd.write(h.a.get('href'))
                 fd.write('\n')
