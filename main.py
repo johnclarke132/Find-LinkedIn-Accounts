@@ -13,7 +13,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 with open('concatenated search .csv') as csvfile:
     spamreader = reader(csvfile, delimiter=',')
     for row in spamreader:
-        # Randomise wait time
+        # Randomise wait time between clicks
         time_to_sleep = randint(3, 10)
 
         # Creating an instance
